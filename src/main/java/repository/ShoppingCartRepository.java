@@ -62,7 +62,7 @@ public class ShoppingCartRepository implements BaseRepository<ShoppingCart> {
     }
 
     @Override
-    public Integer update(ShoppingCart shoppingCart) {
+    public void update(ShoppingCart shoppingCart) {
         String updateShoppingCart = "UPDATE product SET total_price = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(updateShoppingCart);
@@ -72,11 +72,10 @@ public class ShoppingCartRepository implements BaseRepository<ShoppingCart> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     @Override
-    public Integer delete(ShoppingCart shoppingCart) {
+    public void delete(ShoppingCart shoppingCart) {
         String deleteShoppingCart = "DELETE * FROM shopping_cart WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteShoppingCart);
@@ -85,7 +84,6 @@ public class ShoppingCartRepository implements BaseRepository<ShoppingCart> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     @Override

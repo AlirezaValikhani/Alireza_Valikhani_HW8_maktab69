@@ -63,7 +63,7 @@ public class OrderRepository implements BaseRepository<Order> {
         return null;
     }
 
-    public Integer update(Order order) {
+    public void update(Order order) {
         String updateOdrer = "UPDATE order SET order_date = ?, customer_id = ?" +
                 ", status = ? WHERE id = ?";
         try {
@@ -76,11 +76,10 @@ public class OrderRepository implements BaseRepository<Order> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    public Integer delete(Order order) {
-        String deleteOrder = "DELETE * FROM order WHERE id = ?";
+    public void delete(Order order) {
+        String deleteOrder = "DELETE * FROM orders WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteOrder);
             preparedStatement.setInt(1, order.getId());
@@ -88,7 +87,6 @@ public class OrderRepository implements BaseRepository<Order> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public Order mapTo(ResultSet result) {

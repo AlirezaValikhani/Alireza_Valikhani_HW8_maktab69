@@ -34,12 +34,12 @@ public class ShoppingCartToProductService implements BaseService<ShoppingCartToP
     }
 
     @Override
-    public Integer update(ShoppingCartToProduct shoppingCartToProduct) {
-        return shoppingCartToProductRepository.update(shoppingCartToProduct);
+    public void update(ShoppingCartToProduct shoppingCartToProduct) {
+         shoppingCartToProductRepository.update(shoppingCartToProduct);
     }
 
     @Override
-    public Integer delete(ShoppingCartToProduct shoppingCartToProduct) {
-        return shoppingCartToProductRepository.delete(shoppingCartToProduct);
+    public void delete(ShoppingCartToProduct shoppingCartToProduct) {
+         shoppingCartToProductRepository.delete(shoppingCartToProduct);
     }
 }

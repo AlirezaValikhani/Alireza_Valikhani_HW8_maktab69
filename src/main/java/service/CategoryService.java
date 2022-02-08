@@ -21,6 +21,10 @@ public class CategoryService implements BaseService<Category> {
         return categoryRepository.insert(category);
     }
 
+    public Integer insertSuperCategory(Category category) {
+        return categoryRepository.insertSuperCategory(category);
+    }
+
     @Override
     public Category read(Category category) {
         return categoryRepository.read(category);
@@ -35,14 +39,30 @@ public class CategoryService implements BaseService<Category> {
         return categoryRepository.readAllById(id);
     }
 
-    @Override
-    public Integer update(Category category) {
-        return categoryRepository.update(category);
+    public Category readBySuperCategoryId(Integer id) {
+        return categoryRepository.readBySuperCategoryId(id);
+    }
+
+    public List<Category> readAllByName(String name) {
+        return categoryRepository.readAllByName(name);
     }
 
     @Override
-    public Integer delete(Category category) {
-        return categoryRepository.delete(category);
+    public void update(Category category) {
+        categoryRepository.update(category);
+    }
+
+    public void updateSuperCategoryName(Category category) {
+        categoryRepository.updateBySuperCategoryName(category);
+    }
+
+    public void updateSuperCategoryId(Category category) {
+        categoryRepository.updateSuperCategoryId(category);
+    }
+
+    @Override
+    public void delete(Category category) {
+        categoryRepository.delete(category);
     }
 
 }

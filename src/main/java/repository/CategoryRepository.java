@@ -31,7 +31,38 @@ public class CategoryRepository implements BaseRepository<Category> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
+    }
 
+    public Integer insertSuperCategory(Category category) {
+        String insertSuperCategory = "INSERT INTO category (name, super_category_id) VALUES (?, null)" +
+                "returning id;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSuperCategory);
+            preparedStatement.setString(1, category.getName());
+            ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                return result.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Category readBySuperCategoryId(Integer superCategoryId) {
+        String readCategoryById = "SELECT id,c.name FROM category c WHERE c.super_category_id = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(readCategoryById);
+            preparedStatement.setInt(1, superCategoryId);
+            ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                return new Category(result.getInt("id"),
+                        result.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -89,8 +120,21 @@ public class CategoryRepository implements BaseRepository<Category> {
         return null;
     }
 
+    public List<Category> readAllByName(String categoryName) {
+        String readCategory = "SELECT * FROM category WHERE name = ? ";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(readCategory);
+            preparedStatement.setString(1, categoryName);
+            ResultSet result = preparedStatement.executeQuery();
+            return mapToList(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-    public Integer update(Category category) {
+
+    public void update(Category category) {
         String updateCategory = "UPDATE category SET name = ?, super_category_id = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(updateCategory);
@@ -101,11 +145,34 @@ public class CategoryRepository implements BaseRepository<Category> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    public Integer delete(Category category) {
-        String deleteCategory = "DELETE * FROM category WHERE id = ?";
+    public void updateBySuperCategoryName(Category category) {
+        String updateCategory = "UPDATE category SET name = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(updateCategory);
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.setInt(2, category.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateSuperCategoryId(Category category) {
+        String updateCategory = "UPDATE category SET super_category_id = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(updateCategory);
+            preparedStatement.setInt(1, category.getSuperCategory().getId());
+            preparedStatement.setInt(2, category.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(Category category) {
+        String deleteCategory = "DELETE FROM category WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteCategory);
             preparedStatement.setInt(1, category.getId());
@@ -113,7 +180,6 @@ public class CategoryRepository implements BaseRepository<Category> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public Category mapTo(ResultSet result) {

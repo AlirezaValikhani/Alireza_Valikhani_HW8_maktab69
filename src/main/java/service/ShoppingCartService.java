@@ -31,12 +31,12 @@ public class ShoppingCartService implements BaseService<ShoppingCart> {
     }
 
     @Override
-    public Integer update(ShoppingCart shoppingCart) {
-        return null;
+    public void update(ShoppingCart shoppingCart) {
+
     }
 
     @Override
-    public Integer delete(ShoppingCart shoppingCart) {
-        return null;
+    public void delete(ShoppingCart shoppingCart) {
+
     }
 }

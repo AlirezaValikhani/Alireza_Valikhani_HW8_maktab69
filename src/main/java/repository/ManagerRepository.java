@@ -19,7 +19,7 @@ public class ManagerRepository implements BaseRepository<Manager> {
 
     @Override
     public Integer insert(Manager manager) {
-        String insertManager = "INSERT INTO customer (first_name, last_name, username," +
+        String insertManager = "INSERT INTO customer (first_name, last_name, user_name," +
                 "password, email, salary) VALUES (?, ?, ?, ?, ?, ?)" +
                 "returning id;";
         try {
@@ -41,7 +41,7 @@ public class ManagerRepository implements BaseRepository<Manager> {
     }
 
     public Manager readByUsername(String username) {
-        String readManager = "SELECT * FROM manager WHERE username = ?";
+        String readManager = "SELECT * FROM manager WHERE user_name = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(readManager);
             preparedStatement.setString(1, username);
@@ -81,9 +81,9 @@ public class ManagerRepository implements BaseRepository<Manager> {
     }
 
     @Override
-    public Integer update(Manager manager) {
+    public void update(Manager manager) {
         String updateManager = "UPDATE manager SET first_name = ?, last_name = ?," +
-                "username = ?, password = ?, email = ?, salary = ? WHERE id = ?";
+                "user_name = ?, password = ?, email = ?, salary = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(updateManager);
             preparedStatement.setString(1, manager.getFirstName());
@@ -96,11 +96,10 @@ public class ManagerRepository implements BaseRepository<Manager> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     @Override
-    public Integer delete(Manager manager) {
+    public void delete(Manager manager) {
         String deleteManager = "DELETE * FROM manager WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteManager);
@@ -109,7 +108,6 @@ public class ManagerRepository implements BaseRepository<Manager> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     @Override

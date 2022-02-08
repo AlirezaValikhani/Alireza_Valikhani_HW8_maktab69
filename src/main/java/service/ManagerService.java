@@ -38,12 +38,12 @@ public class ManagerService implements BaseService<Manager> {
     }
 
     @Override
-    public Integer update(Manager manager) {
-        return managerRepository.update(manager);
+    public void update(Manager manager) {
+         managerRepository.update(manager);
     }
 
     @Override
-    public Integer delete(Manager manager) {
-        return managerRepository.delete(manager);
+    public void delete(Manager manager) {
+         managerRepository.delete(manager);
     }
 }

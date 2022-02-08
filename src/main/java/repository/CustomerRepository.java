@@ -19,7 +19,7 @@ public class CustomerRepository implements BaseRepository<Customer> {
     }
 
     public Integer insert(Customer customer) {
-        String insertCustomer = "INSERT INTO customer (first_name, last_name, username," +
+        String insertCustomer = "INSERT INTO customer (first_name, last_name, user_name," +
                 "password, email, address, balance, shopping_cart_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" +
                 "returning id;";
         try {
@@ -44,7 +44,7 @@ public class CustomerRepository implements BaseRepository<Customer> {
 
     public Customer readByUsername(String username) {
         String readCustomer = "SELECT * FROM customer c INNER JOIN shopping_cart sc" +
-                " ON c.shopping_cart_id = sc.id WHERE c.username = ?";
+                " ON c.shopping_cart_id = sc.id WHERE c.user_name = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(readCustomer);
             preparedStatement.setString(1, username);
@@ -70,6 +70,21 @@ public class CustomerRepository implements BaseRepository<Customer> {
         return null;
     }
 
+    public Customer readBalance(Integer id) {
+        String readCustomer = "SELECT balance FROM customer WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(readCustomer);
+            preparedStatement.setInt(1,id);
+            ResultSet result = preparedStatement.executeQuery();
+            if(result.next()) {
+                return new Customer(result.getDouble("balance"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Customer> readAll() {
         String readCustomer = "SELECT * FROM customer c INNER JOIN shopping_cart sc " +
                 "ON c.shopping_cart_id = sc.id";
@@ -83,9 +98,9 @@ public class CustomerRepository implements BaseRepository<Customer> {
         return null;
     }
 
-    public Integer update(Customer customer) {
+    public void update(Customer customer) {
         String updateCategory = "UPDATE customer SET first_name = ?, last_name = ?" +
-                ", username = ?, password = ?, email = ?, address = ?, balance = ? WHERE id = ?";
+                ", user_name = ?, password = ?, email = ?, address = ?, balance = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(updateCategory);
             preparedStatement.setString(1, customer.getFirstName());
@@ -99,10 +114,21 @@ public class CustomerRepository implements BaseRepository<Customer> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    public Integer delete(Customer customer) {
+    public void updateBalance(Integer id ,Double balance) {
+        String updateCategory = "UPDATE customer SET balance = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(updateCategory);
+            preparedStatement.setDouble(1, balance);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(Customer customer) {
         String deleteCustomer = "DELETE * FROM customer WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteCustomer);
@@ -111,7 +137,6 @@ public class CustomerRepository implements BaseRepository<Customer> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public Customer mapTo(ResultSet result) {

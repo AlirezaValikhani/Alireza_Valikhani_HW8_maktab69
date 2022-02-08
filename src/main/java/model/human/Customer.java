@@ -35,6 +35,11 @@ public class Customer extends User {
         super(id);
     }
 
+    public Customer(Double balance) {
+        super();
+        this.balance = balance;
+    }
+
     public String getAddress() {
         return address;
     }

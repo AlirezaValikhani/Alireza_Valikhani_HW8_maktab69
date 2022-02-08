@@ -21,7 +21,7 @@ public class OrderToProductRepository implements BaseRepository<OrderToProduct> 
     }
 
     public Integer insert(OrderToProduct orderToProduct) {
-        String insertOrderToProduct = "INSERT INTO order_to_product (order_id, product_id, quantity," +
+        String insertOrderToProduct = "INSERT INTO order_to_product (order_id, product_id, stock," +
                 "total_price) VALUES (?, ?, ?, ?)" +
                 "returning id;";
         try {
@@ -67,8 +67,8 @@ public class OrderToProductRepository implements BaseRepository<OrderToProduct> 
         return null;
     }
 
-    public Integer update(OrderToProduct orderToProduct) {
-        String updateOrderToProduct = "UPDATE order_to_product SET quantity = ? WHERE id = ?";
+    public void update(OrderToProduct orderToProduct) {
+        String updateOrderToProduct = "UPDATE order_to_product SET stock = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(updateOrderToProduct);
             preparedStatement.setInt(1, orderToProduct.getQuantity());
@@ -77,10 +77,9 @@ public class OrderToProductRepository implements BaseRepository<OrderToProduct> 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    public Integer delete(OrderToProduct orderToProduct) {
+    public void delete(OrderToProduct orderToProduct) {
         String deleteOrderToProduct = "DELETE * FROM product WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteOrderToProduct);
@@ -89,7 +88,6 @@ public class OrderToProductRepository implements BaseRepository<OrderToProduct> 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public OrderToProduct mapTo(ResultSet result) {

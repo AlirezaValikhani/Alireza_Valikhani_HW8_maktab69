@@ -15,6 +15,13 @@ public class Product {
         this.price = price;
     }
 
+    public Product(String productName, String description, Double price, Integer stock) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public Product(Integer id, String productName, String description,
                    Double price, Integer stock, Category category) {
         this.id = id;
@@ -25,7 +32,27 @@ public class Product {
         this.category = category;
     }
 
+    public Product(String productName, String description, Double price, Integer stock, Category category) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+    }
+
     public Product(Integer id) {
+        this.id = id;
+    }
+
+    public Product(String productName) {
+        this.productName = productName;
+    }
+
+    public Product(String productName, String description, Double price, Integer stock,Integer id) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
         this.id = id;
     }
 

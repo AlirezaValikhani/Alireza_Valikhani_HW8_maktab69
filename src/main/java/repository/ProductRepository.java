@@ -23,7 +23,7 @@ public class ProductRepository implements BaseRepository<Product> {
 
     public Integer insert(Product product) {
         String insertProduct = "INSERT INTO product (product_name, description, price," +
-                " stock, category_id) VALUES (?, ?, ?, ?, ?)" +
+                " stock, super_category_id) VALUES (?, ?, ?, ?, ?)" +
                 "returning id;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(insertProduct);
@@ -31,7 +31,7 @@ public class ProductRepository implements BaseRepository<Product> {
             preparedStatement.setString(2,product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setInt(4, product.getStock());
-            preparedStatement.setInt(5, product.getCategory().getId());
+            preparedStatement.setInt(5, product.getCategory().getSuperCategory().getId());
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
                 return result.getInt("id");
@@ -44,7 +44,7 @@ public class ProductRepository implements BaseRepository<Product> {
 
     public Product read(Product product) {
         String readProduct = "SELECT * FROM product p INNER JOIN " +
-                "category c ON p.category_id = c.id  WHERE id = ?";
+                "category c ON p.super_category_id = c.id  WHERE p.id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(readProduct);
             preparedStatement.setInt(1, product.getId());
@@ -56,9 +56,23 @@ public class ProductRepository implements BaseRepository<Product> {
         return null;
     }
 
+    public Product readById(Integer id) {
+        String readProduct = "SELECT * FROM product p INNER JOIN " +
+                "category c ON p.super_category_id = c.id  WHERE p.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(readProduct);
+            preparedStatement.setInt(1, id);
+            ResultSet result = preparedStatement.executeQuery();
+            return mapTo(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Product> readAll() {
         String readProduct = "SELECT * FROM product p INNER JOIN " +
-                "category c ON p.category_id = c.id";
+                "category c ON p.super_category_id = c.id";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(readProduct);
             ResultSet result = preparedStatement.executeQuery();
@@ -69,23 +83,40 @@ public class ProductRepository implements BaseRepository<Product> {
         return null;
     }
 
-    public Integer update(Product product) {
+    public void update(Product product) {
         String updateProduct = "UPDATE product SET product_name = ?, description = ?" +
-                ", price = ? WHERE id = ?";
+                ", price = ?, stock = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(updateProduct);
             preparedStatement.setString(1, product.getProductName());
             preparedStatement.setString(2, product.getDescription());
             preparedStatement.setDouble(3, product.getPrice());
-            preparedStatement.setInt(4, product.getId());
+            preparedStatement.setDouble(4, product.getStock());
+            preparedStatement.setInt(5, product.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    public Integer delete(Product product) {
+    public void updateSuperCategoryId(Product product) {
+        String updateProduct = "UPDATE product SET product_name = ?, description = ?" +
+                ", price = ?, stock = ? , super_category_id = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(updateProduct);
+            preparedStatement.setString(1, product.getProductName());
+            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setDouble(3, product.getPrice());
+            preparedStatement.setDouble(4, product.getStock());
+            preparedStatement.setInt(5, product.getCategory().getSuperCategory().getId());
+            preparedStatement.setInt(6, product.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(Product product) {
         String deleteProduct = "DELETE * FROM product WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteProduct);
@@ -94,7 +125,6 @@ public class ProductRepository implements BaseRepository<Product> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public Product mapTo(ResultSet result) {

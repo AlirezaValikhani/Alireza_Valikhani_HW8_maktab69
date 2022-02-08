@@ -19,7 +19,7 @@ public class ShoppingCartToProductRepository implements BaseRepository<ShoppingC
 
     public Integer insert(ShoppingCartToProduct shoppingCartToProduct) {
         String insertShoppingCartToProduct = "INSERT INTO shopping_cart_to_product " +
-                "(shopping_cart_id, product_id, quantity, total_price) VALUES (?, ?, ?, ?)" +
+                "(shopping_cart_id, product_id, stock, total_price) VALUES (?, ?, ?, ?)" +
                 "returning id;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(insertShoppingCartToProduct);
@@ -51,6 +51,20 @@ public class ShoppingCartToProductRepository implements BaseRepository<ShoppingC
         return null;
     }
 
+    public ShoppingCartToProduct readQuantity(ShoppingCartToProduct shoppingCartToProduct) {
+        String readShoppingCartToProduct = "SELECT stock FROM shopping_cart_to_product sctp" +
+                " INNER JOIN product p ON sctp.product_id = p.id WHERE sctp.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(readShoppingCartToProduct);
+            preparedStatement.setInt(1, shoppingCartToProduct.getId());
+            ResultSet result = preparedStatement.executeQuery();
+            return mapTo(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<ShoppingCartToProduct> readAll() {
         String readShoppingCartToProduct = "SELECT * FROM shopping_cart_to_product sctp" +
                 " INNER JOIN product p ON sctp.product_id = p.id";
@@ -64,8 +78,8 @@ public class ShoppingCartToProductRepository implements BaseRepository<ShoppingC
         return null;
     }
 
-    public Integer update(ShoppingCartToProduct shoppingCartToProduct) {
-        String updateShoppingCartToProduct = "UPDATE shopping_cart_to_product SET quantity = ?" +
+    public void update(ShoppingCartToProduct shoppingCartToProduct) {
+        String updateShoppingCartToProduct = "UPDATE shopping_cart_to_product SET stock = ?" +
                 " WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(updateShoppingCartToProduct);
@@ -74,10 +88,9 @@ public class ShoppingCartToProductRepository implements BaseRepository<ShoppingC
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    public Integer delete(ShoppingCartToProduct shoppingCartToProduct) {
+    public void delete(ShoppingCartToProduct shoppingCartToProduct) {
         String deleteShoppingCartToProduct = "DELETE * FROM shopping_cart_To_product WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteShoppingCartToProduct);
@@ -86,7 +99,6 @@ public class ShoppingCartToProductRepository implements BaseRepository<ShoppingC
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public ShoppingCartToProduct mapTo(ResultSet result) {

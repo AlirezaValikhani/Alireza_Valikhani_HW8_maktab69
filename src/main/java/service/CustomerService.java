@@ -30,18 +30,26 @@ public class CustomerService implements BaseService<Customer> {
         return customerRepository.read(customer);
     }
 
+    public Customer readBalance(Integer id) {
+        return customerRepository.readBalance(id);
+    }
+
     @Override
     public List<Customer> readAll() {
         return customerRepository.readAll();
     }
 
     @Override
-    public Integer update(Customer customer) {
-        return customerRepository.update(customer);
+    public void update(Customer customer) {
+         customerRepository.update(customer);
+    }
+
+    public void updateBalance(Integer id, Double balance) {
+        customerRepository.updateBalance(id,balance);
     }
 
     @Override
-    public Integer delete(Customer customer) {
-        return customerRepository.delete(customer);
+    public void delete(Customer customer) {
+         customerRepository.delete(customer);
     }
 }

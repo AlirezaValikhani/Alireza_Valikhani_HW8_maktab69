@@ -32,12 +32,12 @@ public class OrderToProductService implements BaseService<OrderToProduct> {
     }
 
     @Override
-    public Integer update(OrderToProduct orderToProduct) {
-        return orderToProductRepository.update(orderToProduct);
+    public void update(OrderToProduct orderToProduct) {
+         orderToProductRepository.update(orderToProduct);
     }
 
     @Override
-    public Integer delete(OrderToProduct orderToProduct) {
-        return orderToProductRepository.delete(orderToProduct);
+    public void delete(OrderToProduct orderToProduct) {
+         orderToProductRepository.delete(orderToProduct);
     }
 }

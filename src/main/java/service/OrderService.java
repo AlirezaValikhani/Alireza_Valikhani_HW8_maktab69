@@ -31,12 +31,12 @@ public class OrderService implements BaseService<Order> {
     }
 
     @Override
-    public Integer update(Order order) {
-        return orderRepository.update(order);
+    public void update(Order order) {
+         orderRepository.update(order);
     }
 
     @Override
-    public Integer delete(Order order) {
-        return orderRepository.delete(order);
+    public void delete(Order order) {
+         orderRepository.delete(order);
     }
 }

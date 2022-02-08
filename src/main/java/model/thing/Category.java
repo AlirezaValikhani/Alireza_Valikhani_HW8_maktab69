@@ -16,7 +16,29 @@ public class Category {
         this.name = superCategoryName;
     }
 
+    public Category(String name, Category superCategory) {
+        this.name = name;
+        this.superCategory = superCategory;
+    }
+
+    public Category() {
+    }
+
+    public Category(String superCategoryName) {
+        this.id = null;
+        this.name = superCategoryName;
+    }
+
     public Category(Integer id) {
+        this.id = id;
+    }
+
+    public Category(Category superCategory) {
+        this.superCategory = superCategory;
+    }
+
+    public Category(Category superCategory, Integer id) {
+        this.superCategory = superCategory;
         this.id = id;
     }
 

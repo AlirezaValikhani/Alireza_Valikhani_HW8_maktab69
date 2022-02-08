@@ -18,6 +18,9 @@ public class User {
         this.email = email;
     }
 
+    public User() {
+    }
+
     public User(Integer id) {
         this.id = id;
     }
